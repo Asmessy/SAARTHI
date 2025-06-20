@@ -1,0 +1,404 @@
+{
+  "name": "Google calendar Auto",
+  "nodes": [
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Create google calendar events",
+        "calendar": {
+          "__rl": true,
+          "value": "asmessy0@gmail.com",
+          "mode": "list",
+          "cachedResultName": "asmessy0@gmail.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        160,
+        140
+      ],
+      "id": "5ff2438d-e727-49cc-83f6-cac00223d73e",
+      "name": "Create Google Calendar1",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "hjeDeTnWNFap5zoJ",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Searches google calendar events",
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "asmessy0@gmail.com",
+          "mode": "list",
+          "cachedResultName": "asmessy0@gmail.com"
+        },
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        60,
+        80
+      ],
+      "id": "153fbd6c-a9e8-4b21-a818-76f895d6d6e0",
+      "name": "Searches Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "hjeDeTnWNFap5zoJ",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Update google calendar events",
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "asmessy0@gmail.com",
+          "mode": "list",
+          "cachedResultName": "asmessy0@gmail.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "updateFields": {
+          "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+          "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        240,
+        160
+      ],
+      "id": "7db75b8c-d70c-4d88-8c86-5b1aa37e32a8",
+      "name": "Update Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "hjeDeTnWNFap5zoJ",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.text }}",
+        "options": {
+          "systemMessage": "=<AgentInstructions>\n    <Role>\n        <Name>EventManagerAgent</Name>\n        <Description>An intelligent scheduling assistant that manages Google Calendar events by fetching, creating, and updating them based on natural language requests. Additionally, it can coordinate with the user's CRM to send event details via email to attendees.</Description>\n        <currentDate>{{$now}}</currentDate>\n    </Role>\n\n    <Goal>\n        <Primary>Assist the user in managing their schedule by interacting with Google Calendar: fetching events, checking availability, creating new events, updating existing ones, and notifying attendees using CRM data.</Primary>\n    </Goal>\n\n    <Instructions>\n        <Instruction>Always interpret and parse user inputs for intent: FetchEvent, CreateEvent, UpdateEvent, or NotifyAttendee.</Instruction>\n        <Instruction>For fetching single-day events (e.g., \"What do I have on Monday?\"), convert the date to StartDate: YYYY-MM-DD 00:00:00 and EndDate: YYYY-MM-DD 23:59:59.</Instruction>\n        <Instruction>For date ranges (e.g., \"from Monday to Wednesday\"), use StartDate as the first date at 00:00:00 and EndDate as the last date at 23:59:59.</Instruction>\n        <Instruction>Before creating a new event, always check for time conflicts on the user's calendar and inform them of existing events if any.</Instruction>\n        <Instruction>Offer alternative available times if a conflict is detected, then await user confirmation before booking.</Instruction>\n        <Instruction>Always confirm event details like title/topic, time, and participants before creating or updating an event.</Instruction>\n        <Instruction>If a participant’s name is mentioned, use the \"Search CRM in Airtable\" tool to retrieve their email address.</Instruction>\n        <Instruction>Once the event is confirmed and participant emails are available, use the \"Send Emails\" tool to notify attendees with the event details (date, time, topic, location, etc.).</Instruction>\n        <Instruction>Use natural and polite conversation when interacting, mimicking a real assistant.</Instruction>\n        <Instruction>Ensure event timezones match the user's timezone when creating or updating calendar entries.</Instruction>\n        <Instruction>Use the following tools:\n            - Search Google Calendar\n            - Update Google Calendar\n            - Create Google Calendar\n            - Search CRM in Airtable\n            - Send Emails\n        </Instruction>\n        <Instruction>Log all successful operations with a confirmation message like: \"Event has been added to your calendar.\" or \"An email has been sent to the attendee with event details.\"</Instruction>\n    </Instructions>\n</AgentInstructions>\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        160,
+        -60
+      ],
+      "id": "3f04880e-b32c-44e6-90df-954ffe468300",
+      "name": "Ops Manager"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -340,
+        20
+      ],
+      "id": "ec6d9204-6d12-49a5-aaf2-edbc5914d196",
+      "name": "Input",
+      "webhookId": "155b6c04-92e5-4894-9206-406e715b212e",
+      "credentials": {
+        "telegramApi": {
+          "id": "3OGXpfGfay9mSpXP",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Input').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        520,
+        -60
+      ],
+      "id": "42355429-84d6-46d4-a217-69951ceb6d30",
+      "name": "Output",
+      "webhookId": "ddfd8fc2-9797-43ad-849d-bd6c921b564c",
+      "credentials": {
+        "telegramApi": {
+          "id": "3OGXpfGfay9mSpXP",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "https://airtable.com/appa8QGzDxJ9Okx7z/tbllDWydVnVK3A9Nt/viwCH8vUfmiKIodd8",
+          "mode": "url"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbllDWydVnVK3A9Nt",
+          "mode": "list",
+          "cachedResultName": "people",
+          "cachedResultUrl": "https://airtable.com/appa8QGzDxJ9Okx7z/tbllDWydVnVK3A9Nt"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        440,
+        160
+      ],
+      "id": "25f18299-c25e-4fd7-b365-b4f5ee5ac997",
+      "name": "CRM Dataset",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "02ivhXNz0ru870sV",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', `toaddress, email address of event invitee`, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', `emailSubject`, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', `emailBody, email body inviting user to an event`, 'string') }}",
+        "options": {
+          "senderName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Sender_Name', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        340,
+        220
+      ],
+      "id": "2f9c65e9-823e-46eb-8ff2-b462a19f024e",
+      "name": "Send mail",
+      "webhookId": "125e449a-c282-4c6c-8535-3786f0220ba1",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "NKf2tyE0XLz8ssLh",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Input').item.json.message.chat.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        280,
+        -200
+      ],
+      "id": "487d1209-4e2d-496b-8248-39a0239d8035",
+      "name": "Memory"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "=gpt-4o-mini",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        160,
+        -220
+      ],
+      "id": "da8d40d7-a8bd-46ff-855f-7ce492084bce",
+      "name": "Big Brain",
+      "credentials": {
+        "openAiApi": {
+          "id": "t0XEi4BsXFH84Xln",
+          "name": "OpenAi account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d6ba4eb2-b1c1-4b6a-8a3e-852c3d661401",
+              "name": "text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -120,
+        -60
+      ],
+      "id": "930e1c45-80fb-43fb-8cf5-f71b4a997748",
+      "name": "Text"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Create Google Calendar1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Ops Manager",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Searches Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Ops Manager",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Ops Manager",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ops Manager": {
+      "main": [
+        [
+          {
+            "node": "Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Input": {
+      "main": [
+        [
+          {
+            "node": "Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CRM Dataset": {
+      "ai_tool": [
+        [
+          {
+            "node": "Ops Manager",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send mail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Ops Manager",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Ops Manager",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Big Brain": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Ops Manager",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text": {
+      "main": [
+        [
+          {
+            "node": "Ops Manager",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "73a90239-0ff1-424d-9c4e-775a57277ac7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "58b6365ba4dd46fd79d79c154caff948e8079679cacc020e7c49921c8ab4f213"
+  },
+  "id": "HLAFj4U97573hAJV",
+  "tags": []
+}
